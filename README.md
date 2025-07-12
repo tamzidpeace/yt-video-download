@@ -15,7 +15,16 @@ A web application for downloading YouTube videos as MP3 files, built with Next.j
 - Node.js 18+
 - FFmpeg (for audio conversion)
 
-## Installation
-```bash
-bun install
-```
+## Getting Started
+
+1.  **Install dependencies:**
+    ```bash
+    bun install
+    ```
+
+2.  **Run the development server:**
+    ```bash
+    bun dev
+    ```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
