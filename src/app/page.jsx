@@ -99,11 +99,11 @@ export default function Home() {
         )}
       </button>
       <header className="App-header">
-        <h1>YouTube to MP3 Converter</h1>
+        <h1>SoundSnatch</h1>
         <div className="input-container">
           <input
             type="text"
-            placeholder="Enter YouTube URL"
+            placeholder="Enter Any YouTube Video URL to Download"
             value={url}
             onChange={handleUrlChange}
           />
