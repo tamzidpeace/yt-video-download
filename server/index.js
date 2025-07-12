@@ -34,7 +34,7 @@ app.get('/download', async (req, res) => {
     const title = info.videoDetails.title.replace(/[^a-zA-Z0-9-]/g, '_');
     
     res.header('Content-Disposition', `attachment; filename="${title}.mp3"`);
-    const stream = ytdl(url, { quality: 'highestaudio' });
+    const stream = ytdl(url, { quality: 'lowestaudio' });
     
     ffmpeg(stream)
       .audioBitrate(128)
@@ -54,3 +54,5 @@ app.get('/download', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
+
+module.exports = app;
