@@ -7,6 +7,7 @@ function App() {
   const [videoInfo, setVideoInfo] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   const handleUrlChange = (e) => {
     setUrl(e.target.value);
@@ -37,6 +38,8 @@ function App() {
       setError('Please get video info before downloading.');
       return;
     }
+    setDownloading(true);
+    setError(null);
     try {
       const response = await axios.get(`http://localhost:3001/download?url=${encodeURIComponent(url)}`, {
         responseType: 'blob',
@@ -50,6 +53,8 @@ function App() {
       document.body.removeChild(link);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to download video');
+    } finally {
+      setDownloading(false);
     }
   };
 
@@ -73,7 +78,9 @@ function App() {
           <div className="video-info">
             <h2>{videoInfo.title}</h2>
             <img src={videoInfo.thumbnail} alt={videoInfo.title} />
-            <button onClick={handleDownload}>Download MP3</button>
+            <button onClick={handleDownload} disabled={downloading}>
+              {downloading ? 'Downloading...' : 'Download MP3'}
+            </button>
           </div>
         )}
       </header>
