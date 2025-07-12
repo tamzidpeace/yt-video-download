@@ -158,3 +158,34 @@ button:hover:not(:disabled) {
     font-size: 12px;
   }
 }
+
+.video-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  width: 100%;
+  justify-content: center;
+}
+
+.video-container img {
+  max-width: 200px;
+  height: auto;
+}
+
+@media (max-width: 600px) {
+  .video-container {
+    flex-direction: column;
+  }
+  
+  .video-container img {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .video-container button {
+    margin-top: 15px;
+    width: 100%;
+    max-width: 200px;
+  }
+}
