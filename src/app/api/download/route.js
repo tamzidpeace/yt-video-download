@@ -4,6 +4,10 @@ import ffmpeg from 'fluent-ffmpeg';
 import { PassThrough } from 'stream';
 
 export async function GET(request) {
+  const headers = new Headers();
+  headers.set('Access-Control-Allow-Origin', '*');
+  headers.set('Access-Control-Allow-Methods', 'GET');
+
   const { searchParams } = new URL(request.url);
   const url = searchParams.get('url');
 
@@ -31,15 +35,20 @@ export async function GET(request) {
       })
       .pipe(passthrough); // Pipe ffmpeg output to the passthrough stream
 
-    const headers = new Headers({
-      'Content-Type': 'audio/mpeg',
-      'Content-Disposition': `attachment; filename="${title}.mp3"`,
-    });
+    // Update success response headers
+    const downloadHeaders = new Headers(headers);
+    downloadHeaders.set('Content-Type', 'audio/mpeg');
+    downloadHeaders.set('Content-Disposition', `attachment; filename="${title}.mp3"`);
 
-    return new Response(passthrough, { headers });
+    return new Response(passthrough, { headers: downloadHeaders });
 
   } catch (error) {
     console.error('Download error:', error);
-    return NextResponse.json({ error: 'Failed to download video' }, { status: 500 });
+    const errorHeaders = new Headers(headers);
+    errorHeaders.set('Content-Type', 'application/json');
+    return new Response(
+      JSON.stringify({ error: 'Failed to download video' }), 
+      { status: 500, headers: errorHeaders }
+    );
   }
 }

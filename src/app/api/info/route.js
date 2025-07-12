@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import ytdl from '@distube/ytdl-core';
 
 export async function GET(request) {
+  const headers = new Headers();
+  headers.set('Access-Control-Allow-Origin', '*');
+  headers.set('Access-Control-Allow-Methods', 'GET');
+
   const { searchParams } = new URL(request.url);
   const url = searchParams.get('url');
 
