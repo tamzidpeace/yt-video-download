@@ -13,7 +13,7 @@ A web application for downloading YouTube videos as MP3 files, built with Next.j
 
 ## Requirements
 - Node.js 18+
-- FFmpeg (for audio conversion)
+- FFmpeg (for audio conversion) ([download](https://ffmpeg.org/download.html))
 
 ## Getting Started
 
