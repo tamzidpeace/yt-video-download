@@ -1,8 +1,10 @@
+"use client";
+
 import { useState } from 'react';
 import axios from 'axios';
-import './App.css';
+import '../app/globals.css';
 
-function App() {
+export default function Home() {
   const [url, setUrl] = useState('');
   const [videoInfo, setVideoInfo] = useState(null);
   const [error, setError] = useState(null);
@@ -23,7 +25,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:3001/info?url=${encodeURIComponent(url)}`);
+      const response = await axios.get(`/api/info?url=${encodeURIComponent(url)}`);
       setVideoInfo(response.data);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to get video info');
@@ -41,7 +43,7 @@ function App() {
     setDownloading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:3001/download?url=${encodeURIComponent(url)}`, {
+      const response = await axios.get(`/api/download?url=${encodeURIComponent(url)}`, {
         responseType: 'blob',
       });
       const blob = new Blob([response.data], { type: 'audio/mpeg' });
@@ -87,5 +89,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
