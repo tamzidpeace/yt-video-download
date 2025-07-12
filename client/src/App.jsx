@@ -22,7 +22,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`/api/info?url=${encodeURIComponent(url)}`);
+      const response = await axios.get(`http://localhost:3001/info?url=${encodeURIComponent(url)}`);
       setVideoInfo(response.data);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to get video info');
@@ -32,19 +32,25 @@ function App() {
     }
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (!videoInfo) {
       setError('Please get video info before downloading.');
       return;
     }
-    setError(null);
-    const downloadUrl = `/api/download?url=${encodeURIComponent(url)}`;
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = `${videoInfo.title}.mp3`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+      const response = await axios.get(`http://localhost:3001/download?url=${encodeURIComponent(url)}`, {
+        responseType: 'blob',
+      });
+      const blob = new Blob([response.data], { type: 'audio/mpeg' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${videoInfo.title}.mp3`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to download video');
+    }
   };
 
   return (
@@ -61,16 +67,13 @@ function App() {
           <button onClick={handleGetInfo} disabled={loading}>
             {loading ? 'Loading...' : 'Get Info'}
           </button>
-          {loading && <progress></progress>}
         </div>
         {error && <p className="error">{error}</p>}
         {videoInfo && (
           <div className="video-info">
             <h2>{videoInfo.title}</h2>
             <img src={videoInfo.thumbnail} alt={videoInfo.title} />
-            <button onClick={handleDownload}>
-              Download MP3
-            </button>
+            <button onClick={handleDownload}>Download MP3</button>
           </div>
         )}
       </header>
